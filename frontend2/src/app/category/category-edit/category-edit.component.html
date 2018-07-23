@@ -1,0 +1,21 @@
+<div class="col-md-6">
+    <h2 class="text-center">Cadastro de Categoria</h2>
+    <form *ngIf="addForm" [formGroup]="addForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="code">Código:</label>
+        <input type="text" formControlName="code" placeholder="Código" name="code" class="form-control" id="code">
+        <div *ngIf="addForm.invalid">Código é obrigatório</div>
+      </div>
+      <div class="form-group">
+          <label for="exampleFormControlSelect1">Status</label>
+          <select class="form-control" id="status" formControlName="status" id="status">
+            <option [ngValue]="true">ATIVO</option>
+            <option [ngValue]="false">INATIVO</option>
+          </select>
+        </div>
+          <div class="btn-toolbar">
+            <button type="submit" class="btn btn-success">Atualizar</button>
+            <button type="button" class="btn btn-primary" (click)="onCancel($event)" style="margin-left: 20px;">Cancelar</button>
+          </div>
+    </form>
+  </div>

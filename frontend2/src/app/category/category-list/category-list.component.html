@@ -1,0 +1,26 @@
+<div class="col-md-6">
+  <h2> Lista de Categorias </h2>
+  <button class="btn btn-primary" (click)="addCategory()"> Adicionar Categoria</button>
+  <table class="table-responsive-md table-striped">
+    <thead>
+    <tr>
+      <th class="hidden">Id</th>
+      <th>Código</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let category of categories">
+      <td class="hidden">{{ category.id }}</td>
+      <td>{{ category.code }}</td>
+      <td>{{ category.status ? 'ATIVO' : 'INATIVO' }}</td>
+      <td>
+        <button class="btn btn-danger" (click)="deleteCategory(category)" style="margin-left: 10px;"> Apagar </button>
+        <button class="btn btn-primary" (click)="editCategory(category)" style="margin-left: 10px;"> Editar </button>
+        <button class="btn btn-primary" (click)="detailCategory(category)" style="margin-left: 10px;"> Detalhar </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
