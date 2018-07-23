@@ -1,0 +1,86 @@
+version = '0.0.1-SNAPSHOT'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.2'
+    }
+}
+
+apply plugin: 'java'
+
+ext.githubProjectName = rootProject.name
+
+subprojects {
+    group = "com.oda.${githubProjectName}"
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+
+//------------------------------------------------------------------------------------------------------------------------
+//    Tasks - Application
+//------------------------------------------------------------------------------------------------------------------------
+
+task bootFullApplication(type: GradleBuild) {
+    group 'application'
+    description = 'Compila frontend e backend para desenvolvimento'
+    setTasks([':frontend:npmUpdate', ':frontend:cleanFrontend', ':frontend:buildFrontendToSpring', ':backend:bootRun'])
+}
+
+
+
+task bootJarFullApplication(type: GradleBuild) {
+    group 'application'
+    description = 'Compila frontend e backend para desenvolvimento'
+    setTasks([':backend:clean', ':frontend:npmUpdate', ':frontend:cleanFrontend', ':frontend:buildFrontendToSpringProd', ':backend:bootJar'])
+}
+
+task buildFrontEnd(type: GradleBuild) {
+    group 'application'
+    description = 'Compila frontend'
+    setTasks([':frontend:npmUpdate', ':frontend:cleanFrontend', ':frontend:buildFrontendToSpring'])
+}
+
+task buildBackEnd(type: GradleBuild) {
+    group 'application'
+    description = 'Compila backend'
+    setTasks([':backend:bootJar'])
+}
+
+
+task buildAll(type: GradleBuild) {
+    group 'application'
+    description = 'Compila frontend e backend'
+   setTasks([':buildFrontEnd', ':buildBackEnd'])
+}
+
+buildBackEnd.dependsOn 'buildFrontEnd'
+
+//------------------------------------------------------------------------------------------------------------------------
+//    Tasks - Init project
+//------------------------------------------------------------------------------------------------------------------------
+
+task wrapper(type: Wrapper) {
+    group 'init'
+    gradleVersion '4.2'
+    distributionType Wrapper.DistributionType.ALL
+}
+
+//------------------------------------------------------------------------------------------------------------------------
+//    Tasks - Git
+//------------------------------------------------------------------------------------------------------------------------
+
+private void createReleaseTag() {
+    description = 'Cria a tag da release e faz o push'
+    def tagName = "release/${project.version}"
+    ("git tag $tagName").execute()
+    ("git push --tags").execute()
+}
